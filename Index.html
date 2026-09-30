@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-title" content="JustTire">
+<title>JustTire app</title>
+<meta name="theme-color" content="#1F2427">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700&display=swap">
+<style>
+/* Layout: én mobilskærm (max 430px) centreret; header med tilbage-knap, indhold, sticky handlingsknap. Bevidst ét lyst look som tegneserien. */
+:root{
+  --ink:#1F2427; --muted:#5B6468; --paper:#FFFBF2; --card:#FFFFFF; --line:#E6E1D6; --desk:#DDF0F3;
+  --orange:#F28C28; --teal:#2A9D8F; --red:#E4572E; --yellow:#F4C542; --green:#2E9E5B;
+  --display:"Baloo 2",system-ui,sans-serif; --body:"Nunito Sans",system-ui,sans-serif;
+  color-scheme:light;
+}
+html,body{height:100%}
+body{margin:0;background:var(--desk);color:var(--ink);font:16px/1.45 var(--body)}
+.app{max-width:430px;min-height:100%;margin:0 auto;background:var(--paper);display:flex;flex-direction:column;box-shadow:0 0 0 1px var(--line)}
+.demo{background:var(--ink);color:#fff;font-size:12px;text-align:center;padding:5px 16px;letter-spacing:.02em}
+header{display:flex;align-items:center;gap:10px;padding:14px 16px 10px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--paper);z-index:2}
+header h1{font:800 22px/1 var(--display);margin:0;flex:1}
+.back{border:2px solid var(--ink);background:var(--card);border-radius:50%;width:38px;height:38px;font-size:20px;cursor:pointer;display:grid;place-items:center;color:var(--ink)}
+main{flex:1;padding:4px 16px 24px;display:flex;flex-direction:column;gap:14px}
+.logo{display:flex;align-items:center;gap:12px;margin-top:10px}
+.tire{width:52px;height:52px;border-radius:50%;background:#2B2B2B;border:3px solid var(--ink);display:grid;place-items:center;box-shadow:inset 0 0 0 7px #3A3F42}
+.tire i{width:18px;height:18px;border-radius:50%;background:var(--orange);border:2px solid var(--ink)}
+.logo b{font:800 34px/1 var(--display)}
+.hello{font:600 20px/1.2 var(--display);margin:4px 0 0}
+.plate{display:flex;align-items:center;border:3px solid #C8102E;border-radius:8px;background:#fff;overflow:hidden;width:max-content}
+.plate span{background:#1F4FA0;color:#fff;font:700 11px var(--body);padding:10px 6px;align-self:stretch;display:grid;place-items:center}
+.plate input{border:0;font:700 22px/1 ui-monospace,Menlo,monospace;letter-spacing:.06em;width:175px;padding:8px 10px;color:var(--ink);text-transform:uppercase}
+.car{font-size:14px;color:var(--muted)}
+.big{display:flex;align-items:center;gap:14px;width:100%;border:3px solid var(--ink);border-radius:18px;padding:14px 16px;font:800 20px/1.1 var(--display);cursor:pointer;text-align:left;box-shadow:0 4px 0 var(--ink);transition:transform .08s}
+.big:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.big small{display:block;font:400 13px/1.3 var(--body);margin-top:2px;opacity:.9}
+.big .ic{font-size:26px;width:34px;text-align:center}
+.b-teal{background:var(--teal);color:#fff}.b-orange{background:var(--orange);color:var(--ink)}.b-red{background:var(--red);color:#fff}.b-yellow{background:var(--yellow);color:var(--ink)}
+.card{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px}
+.card h3{margin:0 0 4px;font:800 17px/1.2 var(--display)}
+.row{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.muted{color:var(--muted);font-size:14px}
+.price{font:800 20px/1 var(--display);white-space:nowrap}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:2px solid var(--ink);background:var(--card);border-radius:999px;padding:5px 12px;font:700 14px var(--body);cursor:pointer;color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff}
+.opt{cursor:pointer;display:block;width:100%;text-align:left;font:inherit;color:inherit}
+.opt[aria-pressed="true"]{border-color:var(--teal);box-shadow:0 0 0 2px var(--teal)}
+.tag{display:inline-block;font:700 12px var(--body);padding:2px 8px;border-radius:999px;background:#FDE9D4;color:#8A4A0E;margin-top:6px}
+.tag.g{background:#DDF3E6;color:#1C6B3D}
+.cta{position:sticky;bottom:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,var(--paper) 30%)}
+.cta button{width:100%;border:3px solid var(--ink);border-radius:14px;padding:14px;font:800 19px var(--display);background:var(--ink);color:#fff;cursor:pointer}
+.cta button:disabled{opacity:.35;cursor:default}
+.done{text-align:center;padding-top:24px;display:flex;flex-direction:column;gap:12px;align-items:center}
+.check{width:84px;height:84px;border-radius:50%;background:var(--green);border:3px solid var(--ink);color:#fff;font-size:44px;display:grid;place-items:center}
+.done h2{font:800 26px/1.1 var(--display);margin:0}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.steps li{display:flex;gap:10px;align-items:center}
+.dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--ink);flex:none;display:grid;place-items:center;font-size:12px;background:var(--card)}
+.steps li.on .dot{background:var(--green);color:#fff}
+.steps li.now .dot{background:var(--yellow)}
+.gauge{height:10px;border-radius:5px;background:#EEE;overflow:hidden;border:1.5px solid var(--ink)}
+.gauge i{display:block;height:100%;background:var(--orange)}
+.map{height:150px;border-radius:14px;border:2px solid var(--line);background:
+  linear-gradient(90deg,transparent 48%,#F4D58A 48% 52%,transparent 52%),
+  linear-gradient(0deg,transparent 60%,#E3E7E9 60% 64%,transparent 64%),#EAF4EA;position:relative}
+.pin{position:absolute;left:47%;top:30%;font-size:30px}
+.truck{position:absolute;left:14%;top:56%;font-size:26px}
+button:focus-visible,input:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="app" id="app"></div>
+
+<script>
+const app = document.getElementById("app");
+const S = { plate: "AB 12 345", screen: "home", sort: "pris", pick: null, tire: null, vej: null, akutStep: 0 };
+const kr = n => n.toLocaleString("da-DK") + " kr.";
+const TIMES = [
+  {id:1, name:"Dækcenter Nord", km:2.1, when:"I morgen 08:30", t:1, price:399, deal:true},
+  {id:2, name:"Byens Autoværksted", km:1.2, when:"I dag 15:00", t:0, price:549},
+  {id:3, name:"Hjul & Gummi", km:4.8, when:"I morgen 11:00", t:2, price:449},
+  {id:4, name:"Vestbyens Dæk", km:3.3, when:"Torsdag 09:15", t:3, price:479}
+];
+const TIRES = [
+  {id:"a", name:"Nordgrip Winter 2", type:"Vinterdæk · 3PMSF", price:4390, tag:"Mest valgt"},
+  {id:"b", name:"Asfalt Pro All-Season", type:"Helårsdæk · M+S", price:4790},
+  {id:"c", name:"EcoRoll Winter", type:"Vinterdæk · budget", price:3690, tag:"Billigst"}
+];
+
+function header(title){
+  return `<div class="demo">Demo · ingen rigtige bookinger eller betalinger</div>
+  <header>${S.screen === "home" ? "" : `<button class="back" data-go="home" aria-label="Tilbage">‹</button>`}<h1>${title}</h1></header>`;
+}
+function cta(label, action, disabled){ return `<div class="cta"><button data-act="${action}" ${disabled ? "disabled" : ""}>${label}</button></div>`; }
+function carInfo(){ return `<div class="card"><div class="row"><div><h3>${S.plate}</h3><div class="muted">VW ID.3 · 205/55 R16 · TPMS</div></div><div class="muted" style="text-align:right">Hjul på hotel<br><b style="color:var(--ink)">Depot Nord, reol 4</b></div></div></div>`; }
+
+const V = {
+  home: () => header("") + `<main>
+    <div class="logo"><div class="tire"><i></i></div><b>JustTire</b></div>
+    <p class="hello">Hvad skal din bil have?</p>
+    <div><label class="plate" for="plate"><span>DK</span><input id="plate" value="${S.plate}" maxlength="9" aria-label="Nummerplade"></label>
+    <div class="car" style="margin-top:6px">VW ID.3 · 205/55 R16 fundet</div></div>
+    <button class="big b-teal" data-go="skift"><span class="ic">⟳</span><span>Book hjulskift<small>Ledige tider hos værksteder tæt på dig</small></span></button>
+    <button class="big b-orange" data-go="daek"><span class="ic">◎</span><span>Køb nye dæk<small>Én pris inkl. montering</small></span></button>
+    <button class="big b-red" data-go="akut"><span class="ic">!</span><span>Akut hjælp<small>Punktering nu – hjælp til din position</small></span></button>
+    <button class="big b-yellow" data-go="hotel"><span class="ic">▤</span><span>Dækhotel<small>Opbevaring og flytning af dine hjul</small></span></button>
+  </main>`,
+
+  skift: () => header("Book hjulskift") + `<main>${carInfo()}
+    <div class="chips" role="group" aria-label="Sortér">${["pris","afstand","tid"].map(k => `<button class="chip" data-sort="${k}" aria-pressed="${S.sort===k}">${{pris:"Billigst",afstand:"Nærmest",tid:"Tidligst"}[k]}</button>`).join("")}</div>
+    ${[...TIMES].sort((a,b) => S.sort==="pris" ? a.price-b.price : S.sort==="afstand" ? a.km-b.km : a.t-b.t).map(x => `
+      <button class="card opt" data-pick="${x.id}" aria-pressed="${S.pick===x.id}"><div class="row"><div><h3>${x.when}</h3><div class="muted">${x.name} · ${x.km.toString().replace(".",",")} km</div>${x.deal ? `<span class="tag">Ledig tid · værkstedets rabatpris</span>` : ""}</div><div class="price">${kr(x.price)}</div></div></button>`).join("")}
+    <p class="muted">Værkstederne sætter selv deres priser. Du betaler i appen.</p>
+  </main>` + cta("Book og betal", "book-skift", !S.pick),
+
+  daek: () => header("Køb nye dæk") + `<main>${carInfo()}
+    <div class="card"><h3>Dine nuværende dæk</h3><div class="row muted"><span>Mønsterdybde 3,2 mm</span><span>Anbefalet: skift nu</span></div><div class="gauge" style="margin-top:8px"><i style="width:30%"></i></div></div>
+    ${TIRES.map(x => `<button class="card opt" data-tire="${x.id}" aria-pressed="${S.tire===x.id}"><div class="row"><div><h3>${x.name}</h3><div class="muted">${x.type} · 4 stk. inkl. montering</div>${x.tag ? `<span class="tag g">${x.tag}</span>` : ""}</div><div class="price">${kr(x.price)}</div></div></button>`).join("")}
+    <p class="muted">Dækkene sendes direkte til værkstedet, hvor du vælger tid bagefter.</p>
+  </main>` + cta("Køb dæk", "buy-tire", !S.tire),
+
+  akut: () => header("Akut hjælp") + `<main>
+    <div class="map" role="img" aria-label="Kort med din position"><span class="pin">📍</span>${S.akutStep ? `<span class="truck">🚚</span>` : ""}</div>
+    <div class="card"><h3>Din position</h3><div class="muted">E45 nordgående ved Vejle N · præcis position delt</div></div>
+    ${S.akutStep === 0 ? `
+      <div class="card"><h3>Har du vejhjælp via forsikring eller abonnement?</h3>
+      <div class="chips" style="margin-top:8px"><button class="chip" data-vej="ja" aria-pressed="${S.vej==="ja"}">Ja</button><button class="chip" data-vej="nej" aria-pressed="${S.vej==="nej"}">Nej</button></div></div>
+      ${S.vej === "ja" ? `<div class="card"><h3>Ring til dit vejhjælpsselskab</h3><div class="muted">Punktering er dækket af din vejhjælp. Vi gemmer sagen i din dækjournal, så du kan bestille nyt dæk bagefter.</div></div>` : ""}
+      ${S.vej === "nej" ? `<div class="card"><div class="row"><div><h3>Akut punktering</h3><div class="muted">Uden vejhjælpsdækning · udføres af SOS Dansk Autohjælp</div></div><div class="price">${kr(1500)}</div></div></div>` : ""}
+    ` : `
+      <div class="card"><h3>SOS Dansk Autohjælp er på vej</h3><div class="muted">Station Vejle · forventet ankomst ca. 35 min.</div></div>
+      <ul class="steps">
+        <li class="on"><span class="dot">✓</span>Opgave modtaget</li>
+        <li class="${S.akutStep>=2?"on":"now"}"><span class="dot">${S.akutStep>=2?"✓":""}</span>Station på vej</li>
+        <li class="${S.akutStep>=3?"on":S.akutStep===2?"now":""}"><span class="dot">${S.akutStep>=3?"✓":""}</span>Punktering udbedret</li>
+      </ul>`}
+  </main>` + (S.akutStep === 0 ? (S.vej === "nej" ? cta("Send hjælp nu · 1.500 kr.", "akut-send") : "") : S.akutStep < 3 ? cta("Simulér næste trin", "akut-next") : cta("Tilbage til forsiden", "home")),
+
+  hotel: () => header("Dækhotel") + `<main>
+    <div class="card"><div class="row"><div><h3>Dine vinterhjul</h3><div class="muted">Depot Nord · reol 4 · 4 stk. på fælg</div></div><span class="tag g">Opbevaret</span></div>
+      <div class="row muted" style="margin-top:10px"><span>Mønsterdybde</span><b style="color:var(--ink)">6,8 mm</b></div><div class="gauge" style="margin-top:6px"><i style="width:80%;background:var(--green)"></i></div>
+      <div class="row muted" style="margin-top:10px"><span>Næste skift</span><b style="color:var(--ink)">Oktober</b></div></div>
+    <button class="big b-teal" data-go="skift"><span class="ic">⟳</span><span>Book skift<small>Hos Depot Nord, hvor hjulene står</small></span></button>
+    <button class="big b-yellow" data-go="flyt"><span class="ic">⇄</span><span>Flyt mine hjul<small>Fra dækhotellet til et nyt værksted</small></span></button>
+    <div class="card"><div class="row"><div><h3>Hotelaftale</h3><div class="muted">Opbevaring, forsikring og registrering</div></div><div class="price">${kr(900)}<span class="muted" style="font-weight:400"> /år</span></div></div></div>
+  </main>`,
+
+  flyt: () => header("Flyt mine hjul") + `<main>
+    <div class="card"><h3>Fra</h3><div class="muted">Depot Nord · reol 4</div></div>
+    ${TIMES.slice(1).map(x => `<button class="card opt" data-pick="${x.id}" aria-pressed="${S.pick===x.id}"><div class="row"><div><h3>${x.name}</h3><div class="muted">${x.km.toString().replace(".",",")} km fra dig</div></div><span class="muted">Vælg</span></div></button>`).join("")}
+    <div class="card"><div class="row"><div><h3>Dækflytning</h3><div class="muted">Hjulene hentes og leveres til det nye værksted</div></div><div class="price">Pris følger</div></div></div>
+  </main>` + cta("Bestil flytning", "flyt", !S.pick),
+
+  ok: () => header("") + `<main><div class="done"><div class="check">✓</div><h2>${S.okTitle}</h2><p class="muted">${S.okText}</p></div>
+    <div class="card"><h3>Gemt i din dækjournal</h3><div class="muted">${S.plate} · du får en påmindelse, når næste skift nærmer sig.</div></div></main>` + cta("Tilbage til forsiden", "home")
+};
+
+function render(){ app.innerHTML = V[S.screen](); window.scrollTo(0,0); }
+function go(s){ if (s !== S.screen){ S.pick = null; S.tire = null; S.vej = null; S.akutStep = 0; } S.screen = s; render(); }
+function ok(t, x){ S.okTitle = t; S.okText = x; go("ok"); }
+
+app.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  const d = b.dataset;
+  if (d.go) return go(d.go);
+  if (d.sort){ S.sort = d.sort; return render(); }
+  if (d.pick){ S.pick = +d.pick; return render(); }
+  if (d.tire){ S.tire = d.tire; return render(); }
+  if (d.vej){ S.vej = d.vej; return render(); }
+  const t = TIMES.find(x => x.id === S.pick);
+  switch (d.act){
+    case "home": return go("home");
+    case "book-skift": return ok("Tiden er booket", `${t.when} hos ${t.name}. Betalt ${kr(t.price)}.`);
+    case "buy-tire": { const x = TIRES.find(y => y.id === S.tire); return ok("Dækkene er bestilt", `${x.name}, 4 stk. inkl. montering for ${kr(x.price)}. Vælg monteringstid, når dækkene er på værkstedet.`); }
+    case "akut-send": S.akutStep = 1; return render();
+    case "akut-next": S.akutStep++; return render();
+    case "flyt": return ok("Flytning bestilt", `Hjulene flyttes fra Depot Nord til ${t.name}. Du får besked, når de er klar.`);
+  }
+});
+app.addEventListener("input", e => { if (e.target.id === "plate") S.plate = e.target.value.toUpperCase(); });
+render();
+</script>
+
+</body>
+</html>
